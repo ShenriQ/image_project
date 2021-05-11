@@ -18,9 +18,15 @@
 					// show flash message
 					flash_msg();
 				?>
-  				
-					<?php $this->load->view( $template_path .'/'. $module_path .'/entry_form' ); ?>
-			
+
+				<?php 
+					if(isset( $path_form )) {
+						$this->load->view( $template_path .'/'. $module_path .$path_form );
+					}
+					else {
+						$this->load->view( $template_path .'/'. $module_path .'/entry_form' );
+					}
+				?>
 			</div>
 		</div>
 	</div>

@@ -39,7 +39,12 @@
         <script src="<?php echo base_url( 'assets/select2/select2.full.min.js' ); ?>"></script>
         <script>
             $(document).ready(function() {
-                $('.select2').select2();                                    
+                $('.select2').select2();  
+
+                
+                $("#user_list_select_for_team_member").select2({
+                  matcher: matchStart
+                });
             });
         </script>
            

@@ -5,11 +5,11 @@
 		<th><?php echo get_msg('name')?></th>
 		<th><?php echo get_msg('description')?></th>
 		<th><?php echo get_msg('number_members')?></th>
-		<th><?php echo get_msg('view_members')?></th>
+		<th><?php echo get_msg('View Details')?></th>
 
-		<?php if ( $this->ps_auth->has_access( EDIT )): ?>
+		<!-- <?php if ( $this->ps_auth->has_access( EDIT )): ?>
 			<th><?php echo get_msg('btn_edit')?></th>
-		<?php endif;?>
+		<?php endif;?> -->
 
 		<?php if ( $this->ps_auth->has_access( DEL )): ?>
 			<th><span class="th-title"><?php echo get_msg('btn_delete')?></span></th>
@@ -30,17 +30,17 @@
 				<td><?php echo $this->Team_member->getTeamMemberCnt($team->id);?></td>
 				
 				<td>
-					<a href='<?php echo $module_site_url .'/members/'. $team->id; ?>'>
+					<a href='<?php echo $module_site_url .'/edit/'. $team->id; ?>'>
 						<i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
 					</a>
 				</td>
-				<?php if ( $this->ps_auth->has_access( EDIT )): ?>
+				<!-- <?php if ( $this->ps_auth->has_access( EDIT )): ?>
 				<td>
 					<a href='<?php echo $module_site_url .'/edit/'. $team->id; ?>'>
 						<i class='fa fa-pencil-square-o'></i>
 					</a>
 				</td>
-				<?php endif; ?>
+				<?php endif; ?> -->
 
 				<?php if ( $this->ps_auth->has_access( DEL )): ?>
 					

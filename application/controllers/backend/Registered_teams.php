@@ -67,18 +67,85 @@ class Registered_teams extends BE_Controller {
 	/**
 	 * Update the user
 	 */
-	function edit( $id ) {
+	function edit( $id, $current_tab = 'teaminfo' ) {
 
 		// breadcrumb
 		$this->data['action_title'] = get_msg( 'edit' );
 
 		// load team
 		$this->data['team'] = $this->Team->get_one( $id );
+		// get team members
 
+		$conds = array();
+		$this->data['members'] = $this->Team_member->getmembers( $id, $conds );
+
+		// get idle users to add more
+		$this->data['idle_users'] = $this->Team_member->getIdleUsers();
+		// get team tasks
+		$this->data['current_tab'] = $current_tab;
+		$this->data['path_form'] = '/entry_editform';
 		// call update logic
 		parent::edit( $id );
 	}
 
+	function addmember( $id ) {
+		// load team
+		$team = $this->Team->get_one( $id );
+		
+		$team_member_data = array();
+		if ( $this->has_data( 'member_user' )) {
+			$team_member_data['user_id'] = $this->get_data( 'member_user' );
+		}
+		$team_member_data['team_id'] = $id;
+		if ( $this->Team_member->save_member($team_member_data) ) {
+			$this->set_flash_msg( 'success', get_msg( 'success' ));
+		} else {
+			$this->set_flash_msg( 'error', get_msg( 'failed' ));
+		}
+
+		$this->data['current_tab'] = 'members';
+		redirect( site_url('/admin/registered_teams/edit/' . $id ."/members") );
+	}
+
+	function delete_member( $team_id, $user_id ) {
+		
+		if ( $this->Team_member->delete( $team_id, $user_id) ) {
+			$this->set_flash_msg( 'success', get_msg( 'success' ));
+		} else {
+			$this->set_flash_msg( 'error', get_msg( 'failed' ));
+		}
+
+		$this->data['current_tab'] = 'members';
+		redirect( site_url('/admin/registered_teams/edit/' . $team_id ."/members") );
+	}
+	
+	function search_member( $id, $current_tab = 'teaminfo' ) {
+
+		// breadcrumb
+		$this->data['action_title'] = get_msg( 'edit' );
+
+		// load team
+		$this->data['team'] = $this->Team->get_one( $id );
+		// get team members
+
+		$conds = array();
+		if ( $this->has_data( 'searchterm' )) {
+			// handle search term
+			$search_term = $this->searchterm_handler( $this->input->post( 'searchterm' ));
+			// condition
+			$conds = array( 'searchterm' => $search_term );
+		}
+		$this->data['members'] = $this->Team_member->getmembers( $id, $conds );
+
+		// get idle users to add more
+		$this->data['idle_users'] = $this->Team_member->getIdleUsers();
+		// get team tasks
+		$this->data['current_tab'] = $current_tab;
+		$this->data['path_form'] = '/entry_editform';
+		
+		// load entry form
+		$this->load_form( $this->data );
+	}
 	/**
 	 * Delete the team
 	 */
@@ -90,7 +157,6 @@ class Registered_teams extends BE_Controller {
 		// check access
 		$this->check_access( DEL );
 		
-		// delete categories and images
 		if ( !$this->Team->delete( $id )) {
 
 			// set error message

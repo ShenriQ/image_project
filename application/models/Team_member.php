@@ -59,6 +59,43 @@ class Team_member extends PS_Model {
 	function getTeamMemberCnt ($team_id) {
 		return $this->count_all_by(array('team_id', $team_id));
 	}
+
+	function getmembers( $team_id , $conds = array())
+	{
+		$this->db->select ( $this->user_table_name.'.*' ); 
+		$this->db->from ( $this->user_table_name );
+		$this->db->join ( $this->table_name, $this->table_name.'.user_id = '.$this->user_table_name.'.user_id' );
+		$this->db->join ( $this->team_table_name, $this->team_table_name.'.id = '.$this->table_name.'.team_id' );
+		$this->db->where ( $this->team_table_name.'.id', $team_id);
+
+		// searchterm
+		if ( isset( $conds['searchterm'] )) {
+			$this->db->like( $this->user_table_name.'.user_name', $conds['searchterm'] );
+			$this->db->or_like( $this->user_table_name.'.user_email', $conds['searchterm'] );
+		}
+
+		$query = $this->db->get ();
+		return $query->result ();
+	}
+
+	function getIdleUsers( )
+	{
+		// SELECT <column_list>
+		// FROM TABLEA a
+		// LEFTJOIN TABLEB b 
+		// ON a.Key = b.Key 
+		// WHERE b.Key IS NULL;
+
+		$this->db->select ( $this->user_table_name.'.*' ); 
+		$this->db->from ( $this->user_table_name );
+		$this->db->join ( $this->table_name, $this->table_name.'.user_id = '.$this->user_table_name.'.user_id', 'left' );
+		$this->db->where ( $this->table_name.'.user_id IS NULL');
+		$this->db->order_by($this->user_table_name.'.user_name', "asc");
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	
 	/**
 	 * Save function creates/updates the team member data to table.
 	 * If the id is already exist in the teams table, update user data
@@ -68,13 +105,15 @@ class Team_member extends PS_Model {
 	 * @param int $id
 	 * @return bool
 	 */
-	function save_team( &$team_member_data, $id = false )
+	function save_member( &$team_member_data, $id = false )
 	{
 		// start the transaction
 		$this->db->trans_start();
 
 		if ( !$id ) { // insert new			
-			
+			$logged_in_user = $this->ps_auth->get_user_info();
+			$team_member_data['created_at'] = date("Y-m-d H:i:s");
+			$team_member_data['created_by_id'] = $logged_in_user->user_id;
 			if ( ! $this->db->insert( $this->table_name, $team_member_data )) {
 				// if error in inserting new, rollback
 				$this->db->trans_rollback();
