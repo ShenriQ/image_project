@@ -100,7 +100,7 @@ class Module_groups extends BE_Controller {
 		if ( $this->has_data( 'group_lang_key' )) {
 			$data['group_lang_key'] = $this->get_data( 'group_lang_key' );
 		}
-
+		
 		//save module group
 		if ( ! $this->Module_group->save( $data, $group_id )) {
 		// if there is an error in inserting user data,	

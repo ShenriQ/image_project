@@ -197,6 +197,9 @@ $autoload['model'] = array(
     'Privacy_policy',
     'Team',
     'Team_member',
+    'Task',
+    'Task_status',
+    'Task_priority',
 );
 
 //date_default_timezone_set('Asia/Yangon');
