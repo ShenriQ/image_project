@@ -20,6 +20,8 @@ class BE_Controller extends PS_Controller {
 	{
 		parent::__construct( $auth_level, $module_name );
 
+		$this->load->helper('url');
+
 		// template path
 		$this->template_path = $this->config->item( 'be_view_path' );
 
@@ -68,9 +70,27 @@ class BE_Controller extends PS_Controller {
 	 */
 	function index()
 	{
+		$logged_in_user = $this->ps_auth->get_user_info();
+		$request_ip = $this->input->ip_address();
+		$request_url = current_url();
+		$request_type = "GET";
+		if ( $this->is_POST()) {
+			$request_type = "POST";
+		}
+		save_activity_log( 'Viewed', $logged_in_user->user_id, $logged_in_user->role_id, $request_url, $request_type, $request_ip );
 		$this->list_view( $this->module_site_url( 'index' ));
 	}
 
+	function delete( $id ) {
+		$logged_in_user = $this->ps_auth->get_user_info();
+		$request_ip = $this->input->ip_address();
+		$request_url = current_url();
+		$request_type = "GET";
+		if ( $this->is_POST()) {
+			$request_type = "POST";
+		}
+		save_activity_log( 'Deleted', $logged_in_user->user_id, $logged_in_user->role_id, $request_url, $request_type, $request_ip );
+	}
 	/**
 	 * Index
 	 */
@@ -109,6 +129,15 @@ class BE_Controller extends PS_Controller {
 	 */
 	function search()
 	{
+		$logged_in_user = $this->ps_auth->get_user_info();
+		$request_ip = $this->input->ip_address();
+		$request_url = current_url();
+		$request_type = "GET";
+		if ( $this->is_POST()) {
+			$request_type = "POST";
+		}
+		save_activity_log( 'Searched', $logged_in_user->user_id, $logged_in_user->role_id, $request_url, $request_type, $request_ip );
+
 		$this->list_view( $this->module_site_url( 'search' ));	
 	}
 
@@ -249,9 +278,17 @@ class BE_Controller extends PS_Controller {
 
 			// server side validation
 			if ( $this->is_valid_input()) {
-
 				// save user info
 				$this->save();
+
+				$logged_in_user = $this->ps_auth->get_user_info();
+				$request_ip = $this->input->ip_address();
+				$request_url = current_url();
+				$request_type = "GET";
+				if ( $this->is_POST()) {
+					$request_type = "POST";
+				}
+				save_activity_log( 'Created', $logged_in_user->user_id, $logged_in_user->role_id, $request_url, $request_type, $request_ip );
 			}
 		}
 		// load entry form
@@ -274,6 +311,15 @@ class BE_Controller extends PS_Controller {
 
 				// save user info
 				$this->save(false,$language_id);
+
+				$logged_in_user = $this->ps_auth->get_user_info();
+				$request_ip = $this->input->ip_address();
+				$request_url = current_url();
+				$request_type = "GET";
+				if ( $this->is_POST()) {
+					$request_type = "POST";
+				}
+				save_activity_log( 'Added a language', $logged_in_user->user_id, $logged_in_user->role_id, $request_url, $request_type, $request_ip );
 			}
 		}
 
@@ -393,6 +439,15 @@ class BE_Controller extends PS_Controller {
 
 				// save user info
 				$this->save( $id );
+
+				$logged_in_user = $this->ps_auth->get_user_info();
+				$request_ip = $this->input->ip_address();
+				$request_url = current_url();
+				$request_type = "GET";
+				if ( $this->is_POST()) {
+					$request_type = "POST";
+				}
+				save_activity_log( 'Updated', $logged_in_user->user_id, $logged_in_user->role_id, $request_url, $request_type, $request_ip );
 			}
 		}
 		// load entry form

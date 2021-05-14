@@ -205,6 +205,7 @@ class Modules extends BE_Controller {
 	    } else {
 	           
 	     $this->set_flash_msg( 'success', get_msg( 'success_module_delete' ));
+		 parent::delete( $module_id );
 	    }
 
 	    redirect( $this->module_site_url());

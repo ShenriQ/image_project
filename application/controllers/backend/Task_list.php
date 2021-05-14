@@ -167,11 +167,10 @@ class Task_list extends BE_Controller {
 		 * Check Transcation Status
 		 */
 		if ( !$this->check_trans()) {
-
 			$this->set_flash_msg( 'error', get_msg( 'err_model' ));	
 		} else {
-        	
 			$this->set_flash_msg( 'success', get_msg( 'success' ));
+			parent::delete( $id );
 		}
 		
 		redirect( $this->module_site_url());

@@ -114,6 +114,8 @@ class Systemlog_list extends BE_Controller {
 		}
 		else {
 			$this->set_flash_msg( 'success', get_msg( 'success' ));
+
+			parent::delete( $name );
 		}
 
 		redirect( $this->module_site_url());		

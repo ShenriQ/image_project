@@ -413,3 +413,41 @@ if ( ! function_exists( 'global_user_check' ))
 		return true;
 	}
 }
+
+
+/**
+ * save activity log
+ *
+ * @param      <type>  $type   The type
+ */
+if ( ! function_exists( 'save_activity_log' ))
+{
+	function save_activity_log( $type, $user_id, $role_id, $request_url, $request_type, $request_ip )
+	{
+		// get ci instance
+		$CI =& get_instance();
+		$CI->load->model( 'User' );
+
+		$path = parse_url($request_url, PHP_URL_PATH);  
+		$behavior_target = substr($path, 1);
+
+		$tmp_parts = explode("index.php/admin/", $request_url);
+		if(count($tmp_parts) > 1) {
+			$behavior_target = $tmp_parts[1];
+		}
+
+		$log_data = array(
+			'datetime' => date("Y-m-d H:i:s"),
+			'name' => "$type $behavior_target",
+			'description' => "$type $behavior_target",
+			'request_url' => $request_url,
+			'request_type' => $request_type,
+			'causer_id' => $user_id,
+			'causer_role' => $role_id,
+			'causer_ip' => $request_ip
+		);
+
+		$CI->Activitylog->save($log_data);
+
+	}
+}

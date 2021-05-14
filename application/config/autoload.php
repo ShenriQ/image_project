@@ -202,6 +202,7 @@ $autoload['model'] = array(
     'Task_priority',
     'Sample',
     'Backup',
+    'Activitylog'
 );
 
 date_default_timezone_set('Asia/Hongkong');
