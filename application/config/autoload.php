@@ -201,7 +201,8 @@ $autoload['model'] = array(
     'Task_status',
     'Task_priority',
     'Sample',
+    'Backup',
 );
 
-//date_default_timezone_set('Asia/Yangon');
-date_default_timezone_set('America/Los_Angeles');
+date_default_timezone_set('Asia/Hongkong');
+// date_default_timezone_set('America/Los_Angeles');
