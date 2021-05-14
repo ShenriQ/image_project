@@ -3,7 +3,7 @@
 		<?php
 			$attributes = array('class' => 'form-inline');
 			
-			echo form_open( site_url('/admin/registered_teams/search_member/' . @$team->id ."/members"), $attributes );
+			echo form_open( site_url('/admin/task_list/search_images/' . @$task->id ."/images"), $attributes );
 		?>
 			<div class="form-group" style="padding-right: 3px;">
 				<?php echo form_input(array(
@@ -22,7 +22,7 @@
 		  	</div>
 
 		  	<div class="form-group">
-	  			<a href="<?php echo site_url('/admin/registered_teams/edit/' . @$team->id ."/members"); ?>" class="btn btn-sm btn-primary">
+	  			<a href="<?php echo site_url('/admin/task_list/edit/' . @$task->id ."/images"); ?>" class="btn btn-sm btn-primary">
 			  		<?php echo get_msg( 'btn_reset' ); ?>
 			  	</a>
 		  	</div>

@@ -1,37 +1,37 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Task_list extends BE_Controller {
+class Sample_list extends BE_Controller {
 
 	/**
 	 * Constructs required variables
 	 */
 	function __construct() {
-		parent::__construct( MODULE_CONTROL, 'TASK LIST' );
+		parent::__construct( MODULE_CONTROL, 'SAMPLE LIST' );
 	}
 
 	function index() {
 
-		//registered tasks filter
+		//registered samples filter
 		$conds = array( 'is_trashed' => 0 );
 
 		// get rows count
-		$this->data['rows_count'] = $this->Task->count_all_by($conds);
+		$this->data['rows_count'] = $this->Sample->count_all_by($conds);
 
-		// get tasks
-		$this->data['tasks'] = $this->Task->get_all_by($conds, $this->pag['per_page'], $this->uri->segment( 4 ) );
+		// get samples
+		$this->data['samples'] = $this->Sample->get_all_by($conds, $this->pag['per_page'], $this->uri->segment( 4 ) );
 
 		// load index logic
 		parent::index();
 	}
 
 	/**
-	 * Searches for the first match in tasks
+	 * Searches for the first match in samples
 	 */
 	function search() {
 
 		// breadcrumb urls
-		$data['action_title'] = get_msg( 'tasks_search' );
+		$data['action_title'] = get_msg( 'samples_search' );
 
 		// handle search term
 		$search_term = $this->searchterm_handler( $this->input->post( 'searchterm' ));
@@ -39,9 +39,9 @@ class Task_list extends BE_Controller {
 		// condition
 		$conds = array( 'searchterm' => $search_term );
 
-		$this->data['rows_count'] = $this->Task->count_all_by( $conds );
+		$this->data['rows_count'] = $this->Sample->count_all_by( $conds );
 
-		$this->data['tasks'] = $this->Task->get_all_by( $conds, $this->pag['per_page'], $this->uri->segment( 4 ));
+		$this->data['samples'] = $this->Sample->get_all_by( $conds, $this->pag['per_page'], $this->uri->segment( 4 ));
 		
 		parent::search();
 	}
@@ -61,13 +61,13 @@ class Task_list extends BE_Controller {
 	/**
 	 * Update the user
 	 */
-	function edit( $id, $current_tab = 'taskinfo' ) {
+	function edit( $id, $current_tab = 'sampleinfo' ) {
 
 		// breadcrumb
 		$this->data['action_title'] = get_msg( 'edit' );
 
-		// load task
-		$this->data['task'] = $this->Task->get_one( $id );
+		// load sample
+		$this->data['sample'] = $this->Sample->get_one( $id );
 		// // get team members
 
 		// $conds = array();
@@ -75,7 +75,7 @@ class Task_list extends BE_Controller {
 
 		// // get idle users to add more
 		// $this->data['idle_users'] = $this->Team_member->getIdleUsers();
-		// get team tasks
+		// get team samples
 		$this->data['current_tab'] = $current_tab;
 		$this->data['path_form'] = '/entry_editform';
 		// call update logic
@@ -133,7 +133,7 @@ class Task_list extends BE_Controller {
 
 		// get idle users to add more
 		$this->data['idle_users'] = $this->Team_member->getIdleUsers();
-		// get team tasks
+		// get team samples
 		$this->data['current_tab'] = $current_tab;
 		$this->data['path_form'] = '/entry_editform';
 		
@@ -141,7 +141,7 @@ class Task_list extends BE_Controller {
 		$this->load_form( $this->data );
 	}
 	/**
-	 * Delete the task
+	 * Delete the sample
 	 */
 	function delete( $id ) {
 
@@ -151,7 +151,7 @@ class Task_list extends BE_Controller {
 		// check access
 		$this->check_access( DEL );
 		
-		if ( !$this->Task->delete( $id )) {
+		if ( !$this->Sample->delete( $id )) {
 
 			// set error message
 			$this->set_flash_msg( 'error', get_msg( 'err_model' ));
@@ -180,28 +180,32 @@ class Task_list extends BE_Controller {
 	/**
 	 * @param      boolean  $team_id  The user identifier
 	 */
-	function save( $task_id = false ) {
+	function save( $sample_id = false ) {
 		// prepare user object and permission objects
-		$task_data = array();
+		$sample_data = array();
 
-		if ( $this->has_data( 'task_name' )) {
-			$task_data['name'] = $this->get_data( 'task_name' );
+		if ( $this->has_data( 'sample_index' )) {
+			$sample_data['sample_index'] = $this->get_data( 'sample_index' );
 		}
 
-		if( $this->has_data( 'description' )) {
-			$task_data['description'] = $this->get_data( 'description' );
+		if( $this->has_data( 'inspection_time' )) {
+			$sample_data['inspection_time'] = $this->get_data( 'inspection_time' );
+			$date_time = explode("T", $sample_data['inspection_time']);
+			// $dateTime = DateTime::createFromFormat('Y-m-d H:i', $date_time[0]." ".$date_time[1]); 
+			$sample_data['inspection_time'] = $date_time[0]." ".$date_time[1];
 		}
 
-		if( $this->has_data( 'priority' )) {
-			$task_data['priority'] = $this->get_data( 'priority' );
+		if( $this->has_data( 'num_of_imgs_each_col' )) {
+			$sample_data['num_of_imgs_each_col'] = $this->get_data( 'num_of_imgs_each_col' );
 		}
 
-		if( $this->has_data( 'status' )) {
-			$task_data['status'] = $this->get_data( 'status' );
+		if( $this->has_data( 'num_of_imgs_each_row' )) {
+			$sample_data['num_of_imgs_each_row'] = $this->get_data( 'num_of_imgs_each_row' );
 		}
 		
+		
 		// save data
-		if ( ! $this->Task->save( $task_data, $task_id )) {
+		if ( ! $this->Sample->save( $sample_data, $sample_id )) {
 			$this->set_flash_msg( 'error', get_msg( 'err_model' ));
 		} else {
 			// if no eror in inserting
@@ -221,12 +225,12 @@ class Task_list extends BE_Controller {
 		
 		$rule = 'required';
 
-		$this->form_validation->set_rules( 'task_name', get_msg( 'name' ), $rule);
-		$this->form_validation->set_rules( 'description', get_msg( 'description' ), $rule);
+		$this->form_validation->set_rules( 'sample_index', get_msg( 'sample_index' ), $rule);
+		$this->form_validation->set_rules( 'inspection_time', get_msg( 'inspection_time' ), $rule);
+		$this->form_validation->set_rules( 'num_of_imgs_each_col', get_msg( 'num_of_imgs_each_col' ), $rule);
+		$this->form_validation->set_rules( 'num_of_imgs_each_row', get_msg( 'num_of_imgs_each_row' ), $rule);
 
 		if ( $this->form_validation->run() == FALSE ) {
-		// if there is an error in validating,
-
 			return false;
 		}
 

@@ -81,6 +81,7 @@
           //Date range picker
         $('#reservation').daterangepicker()
 
+        $('#date_one_picker').datetimepicker()
         })
 
     </script>

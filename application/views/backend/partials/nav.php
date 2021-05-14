@@ -42,7 +42,7 @@
                 if( $logged_in_user->user_profile_photo  != "") {
               ?>
             
-                <img src="<?php echo img_url( 'thumbnail/'. $logged_in_user->user_profile_photo ); ?>" class="user-image" alt="User Image">
+                <img src="<?php echo img_url( '/'. $logged_in_user->user_profile_photo ); ?>" class="user-image" alt="User Image">
 
               <?php } else { ?>
 

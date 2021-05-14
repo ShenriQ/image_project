@@ -200,6 +200,7 @@ $autoload['model'] = array(
     'Task',
     'Task_status',
     'Task_priority',
+    'Sample',
 );
 
 //date_default_timezone_set('Asia/Yangon');

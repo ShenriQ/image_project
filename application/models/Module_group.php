@@ -51,4 +51,31 @@ class Module_group extends PS_Model {
 		}
 
 	}
+
+	function save( &$data, $group_id = false )
+	{
+		// start the transaction
+		$this->db->trans_start();
+
+		if ( !$group_id ) { // insert new			
+			if ( ! $this->db->insert( $this->table_name, $data )) {
+				// if error in inserting new, rollback
+				$this->db->trans_rollback();
+        		return false;
+			}
+
+		} else {
+			//else update the data
+		
+			$this->db->where( 'group_id', $group_id );
+			
+			if ( ! $this->db->update( $this->table_name, $data )) {
+				// if error in updating, rollback
+				$this->db->trans_rollback();
+        		return false;
+			}
+		}
+		// commit the transaction
+		return $this->db->trans_commit();
+	}
 }

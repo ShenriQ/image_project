@@ -1,16 +1,16 @@
 <?php
 $attributes = array('id' => 'team-form' );
 
-echo form_open(  site_url('/admin/task_list/edit/' . @$task->id), $attributes);
+echo form_open(  site_url('/admin/sample_list/edit/' . @$sample->id), $attributes);
 ?>
 <section class="content animated fadeInRight">
     <div class="card card-info">
         <ul class="nav nav-tabs" id="myTab">
 
             <?php
-	    		$active_tab_taskinfo="";
-	    		if($current_tab == "taskinfo") {
-	    			$active_tab_taskinfo = "active";
+	    		$active_tab_sampleinfo="";
+	    		if($current_tab == "sampleinfo") {
+	    			$active_tab_sampleinfo = "active";
 	    		}
 	    		
 	    		if($current_tab == "images") {
@@ -21,94 +21,94 @@ echo form_open(  site_url('/admin/task_list/edit/' . @$task->id), $attributes);
 	    			$active_tab_assign = "active";
 	    		}
 
-	    		if($active_tab_taskinfo == "" && $active_tab_images == "" &&  $active_tab_assign == "") {
+	    		if($active_tab_sampleinfo == "" && $active_tab_images == "" &&  $active_tab_assign == "") {
 
-	    			$active_tab_taskinfo = "active";
+	    			$active_tab_sampleinfo = "active";
 	    		} 
 	    	?>
 
-            <li class="nav-item"><a class="nav-link <?php echo $active_tab_taskinfo;?>" href="#taskinfo"
-                    value="taskinfo" data-toggle="tab">Task Information</a></li>
+            <li class="nav-item"><a class="nav-link <?php echo $active_tab_sampleinfo;?>" href="#sampleinfo"
+                    value="sampleinfo" data-toggle="tab">Sample Information</a></li>
             <li class="nav-item"><a class="nav-link <?php echo $active_tab_images;?>" href="#images" value="images"
-                    data-toggle="tab">Task Images</a></li>
+                    data-toggle="tab">Sample Images</a></li>
             <li class="nav-item"><a class="nav-link <?php echo $active_tab_assign;?>" href="#assign" value="assign"
-                    data-toggle="tab">Task assignment</a></li>
+                    data-toggle="tab">Sample assignment</a></li>
         </ul>
         <!-- /.card-header -->
         <div class="card-body">
             <div class="tab-content">
-                <div class="tab-pane <?php echo $active_tab_taskinfo;?>" id="taskinfo">
+                <div class="tab-pane <?php echo $active_tab_sampleinfo;?>" id="sampleinfo">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label><span
-                                        style="font-size: 17px; color: red;">*</span><?php echo get_msg('name'); ?></label>
+                                <label><?php echo get_msg('sample_index')?></label>
                                 <?php echo form_input( array(
-							'name' => 'task_name',
-							'value' => set_value( 'task_name', show_data( @$task->name ), false ),
+                            'type' => 'number',
+ 							'name' => 'sample_index',
+							'value' => set_value( 'sample_index', show_data( @$sample->sample_index ), false ),
 							'class' => 'form-control form-control-sm',
-							'placeholder' => get_msg( 'name' ),
-							'id' => 'task_name'
+							'placeholder' => get_msg( 'sample_index' ),
+							'id' => 'sample_index',
+                            'style' => 'margin-top: 8px;'
 						)); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <?php $date_time = explode(" ", $sample->inspection_time);  ?>
                             <div class="form-group">
-                                <label><span
-                                        style="font-size: 17px; color: red;">*</span><?php echo get_msg('description'); ?></label>
-                                <?php echo form_input( array(
-							'name' => 'description',
-							'value' => set_value( 'description', show_data( @$task->description ), false ),
-							'class' => 'form-control form-control-sm',
-							'placeholder' => get_msg( 'description' ),
-							'id' => 'description'
-						)); ?>
+                                <label><?php echo get_msg('inspection_time')?></label>
+                                <div class="input-group" style="padding-top: 5px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <?php echo form_input(array(
+                                'type' => 'datetime-local',
+                                'name' => 'inspection_time',
+                                'value' => set_value( 'inspection_time' , $date_time[0]."T".$date_time[1] ),
+                                'class' => 'form-control',
+                                'placeholder' => '',
+                                // 'id' => 'date_one_picker',
+                                'size' => '20',
+                                // 'readonly' => 'readonly'
+                            )); ?>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label> <span style="font-size: 17px; color: red;">*</span>
-                                    <?php echo get_msg('priority')?>
+                                <label>
+                                    <?php echo get_msg('num_of_imgs_each_col')?>
                                 </label>
-
-                                <?php
-							$options=array();
-							$pritorities = $this->Task_priority->get_all();
-							foreach($pritorities->result() as $priority) {
-									$options[$priority->id]=$priority->name;
-							}
-
-							echo form_dropdown(
-								'priority',
-								$options,
-								set_value( 'priority', show_data( @$task->priority), false ),
-								'class="form-control form-control-sm mr-3" id="priority"'
-							);
-						?>
+                                <?php echo form_input( array(
+                            'type' => 'number',
+ 							'name' => 'num_of_imgs_each_col',
+							'value' => set_value( 'num_of_imgs_each_col', show_data( @$sample->num_of_imgs_each_col ), false ),
+							'class' => 'form-control form-control-sm',
+							'placeholder' => get_msg( 'num_of_imgs_each_col' ),
+							'id' => 'num_of_imgs_each_col',
+                            'style' => 'margin-top: 8px;'
+						)); ?>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label> <span style="font-size: 17px; color: red;">*</span>
-                                    <?php echo get_msg('task_status')?>
+                                <label>
+                                    <?php echo get_msg('num_of_imgs_each_row')?>
                                 </label>
-
-                                <?php
-							$options=array();
-							$statuses = $this->Task_status->get_all( );
-							foreach($statuses->result() as $status) {
-									$options[$status->id]=$status->name;
-							}
-
-							echo form_dropdown(
-								'status',
-								$options,
-								set_value( 'status', show_data( @$task->status), false ),
-								'class="form-control form-control-sm mr-3" id="status"'
-							);
-						?>
+                                <?php echo form_input( array(
+                            'type' => 'number',
+ 							'name' => 'num_of_imgs_each_row',
+							'value' => set_value( 'num_of_imgs_each_row', show_data( @$sample->num_of_imgs_each_row ), false ),
+							'class' => 'form-control form-control-sm',
+							'placeholder' => get_msg( 'num_of_imgs_each_row' ),
+							'id' => 'num_of_imgs_each_row',
+                            'style' => 'margin-top: 8px;'
+						)); ?>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ echo form_open(  site_url('/admin/task_list/edit/' . @$task->id), $attributes);
                             <?php echo get_msg('btn_save')?>
                         </button>
 
-                        <a href="<?php echo site_url('admin/task_list');?>"
+                        <a href="<?php echo site_url('admin/sample_list');?>"
                             class="btn btn-primary"><?php echo get_msg('btn_cancel'); ?></a>
 
                     </div>
@@ -126,17 +126,17 @@ echo form_open(  site_url('/admin/task_list/edit/' . @$task->id), $attributes);
                     <form> </form>
                     <?php 
 						$search_form = $template_path .'/'. $module_path .'/search_form_images';
-						$task_data = array(
-							'task' => @$task
+						$sample_data = array(
+							'sample' => @$sample
 						);
-						if ( is_view_exists( $search_form )) $this->load->view( $search_form , $task_data); 
+						if ( is_view_exists( $search_form )) $this->load->view( $search_form , $sample_data); 
 					?>
 
                     <?php 
 						$image_listview = $template_path .'/'. $module_path .'/image_list';
 						$images_data = array(
 							'users' => @$images,
-							'task' => @$task
+							'sample' => @$sample
 						);
 						if ( is_view_exists( $image_listview )) $this->load->view( $image_listview, $images_data ); 
 					?>

@@ -87,7 +87,7 @@
 
 					<div class="thumbnail">
 						<?php $logged_in_user = $this->ps_auth->get_user_info(); ?>
-						<img src="<?php echo img_url( 'thumbnail/'. $logged_in_user->user_profile_photo ); ?>" width="150px">
+						<img src="<?php echo img_url( '/'. $logged_in_user->user_profile_photo ); ?>" width="150px">
 
 						<br/>
 						

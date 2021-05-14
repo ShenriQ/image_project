@@ -7,26 +7,24 @@
 		<th><?php echo get_msg('user_email')?></th>
 		<th><?php echo get_msg('user_phone')?></th>
 		<th><?php echo get_msg('role')?></th>
-
 		<th><span class="th-title"><?php echo get_msg('btn_delete')?></span></th>
-
 	</tr>
 
 	<?php $count = $this->uri->segment(6) or $count = 0; ?>
-	<?php if ( !empty( $users ) && count( $users) > 0 ): ?>
+	<?php if ( !empty( $images ) && count( $images) > 0 ): ?>
 			
-		<?php foreach($users as $user): ?>
+		<?php foreach($images as $image): ?>
 			
 			<tr>
 				<td><?php echo ++$count;?></td>
-				<td><?php echo $user->user_name;?></td>
-				<td><?php echo $user->user_email;?></td>
-				<td><?php echo $user->user_phone;?></td>
+				<td><?php echo $image->user_name;?></td>
+				<td><?php echo $image->user_email;?></td>
+				<td><?php echo $image->user_phone;?></td>
 
-				<td><?php echo $this->Role->get_name( $user->role_id );?></td>
+				<td><?php echo $this->Role->get_name( $image->role_id );?></td>
 
 				<td>
-					<a herf='#' class='btn-delete' data-toggle="modal" data-target="#myModal" id="<?php echo "$user->user_id";?>">
+					<a herf='#' class='btn-delete' data-toggle="modal" data-target="#myModal" id="<?php echo "$image->user_id";?>">
 						<i class='fa fa-trash-o'></i>
 					</a>
 				</td>
@@ -55,7 +53,7 @@ function runAfterJQ() {
 			var user_id = $(this).attr('id');
 
 			var post_url = "<?php 
-			echo site_url('/admin/registered_teams/delete_member/'.@$team->id.'/'); ?>"
+			echo site_url('/admin/task_list/delete_image/'.@$image->id.'/'); ?>"
 
 			// modify link with id
 			$('.btn-yes').attr( 'href', post_url + user_id );

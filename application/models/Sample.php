@@ -2,12 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Task Model for core_tasks table
+ * Sample Model for core_samples table
  */
-class Task extends PS_Model {
+class Sample extends PS_Model {
 
 	protected $user_table_name;
-	protected $assigns_table_name;
 	protected $task_samples_table_name;
 	protected $images_table_name;
 	/**
@@ -15,13 +14,12 @@ class Task extends PS_Model {
 	 */
 	function __construct() 
 	{
-		parent::__construct( 'core_tasks', 'id' );
+		parent::__construct( 'core_samples', 'id' );
 
 		// initialize table names
-		$this->user_table_name = "core_users";
-		$this->assigns_table_name = "core_tasks_assign";
-		$this->task_samples_table_name = "core_task_samples";
+		$this->user_table_name = "core_tasks";
 		$this->images_table_name = "core_imgs";
+		$this->task_samples_table_name = "core_task_samples";
 	}
 
 	/**
@@ -50,53 +48,48 @@ class Task extends PS_Model {
 		if ( isset( $conds['trashed_by_id'] )) {
 			$this->db->where( 'trashed_by_id', $conds['trashed_by_id'] );
 		}
-		// completed_by_id condition
-		if ( isset( $conds['completed_by_id'] )) {
-			$this->db->where( 'completed_by_id', $conds['completed_by_id'] );
+		// sample_index condition
+		if ( isset( $conds['sample_index'] )) {
+			$this->db->where( 'sample_index', $conds['sample_index'] );
 		}
-		// updated_by_id condition
-		if ( isset( $conds['updated_by_id'] )) {
-			$this->db->where( 'updated_by_id', $conds['updated_by_id'] );
+		// operator_check condition
+		if ( isset( $conds['operator_check'] )) {
+			$this->db->where( 'operator_check', $conds['operator_check'] );
 		}
-
-		// name condition
-		if ( isset( $conds['name'] )) {
-			$this->db->where( 'name', $conds['name'] );
+		// operator_ip condition
+		if ( isset( $conds['operator_ip'] )) {
+			$this->db->where( 'operator_ip', $conds['operator_ip'] );
 		}
-		// priority condition
-		if ( isset( $conds['priority'] )) {
-			$this->db->where( 'priority', $conds['priority'] );
-		}
-		// status condition
-		if ( isset( $conds['status'] )) {
-			$this->db->where( 'status', $conds['status'] );
+		// operator_id condition
+		if ( isset( $conds['operator_id'] )) {
+			$this->db->where( 'operator_id', $conds['operator_id'] );
 		}
 
 		// searchterm
 		if ( isset( $conds['searchterm'] )) {
-			$this->db->like( 'name', $conds['searchterm'] );
-			$this->db->or_like( 'description', $conds['searchterm'] );
+			$this->db->like( 'sample_index', $conds['searchterm'] );
+			$this->db->or_like( 'operator_check', $conds['searchterm'] );
 		}
 
 		$this->db->order_by( 'created_at', 'desc' );
 	}
 
 	/**
-	 * @param ref array $task_data
-	 * @param int $task_id
+	 * @param ref array $sample_data
+	 * @param int $sample_id
 	 * @return bool
 	 */
-	function save( &$task_data, $task_id = false )
+	function save( &$sample_data, $sample_id = false )
 	{
 		// start the transaction
 		$this->db->trans_start();
 
-		if ( !$task_id ) { // insert new			
+		if ( !$sample_id ) { // insert new			
 			$logged_in_user = $this->ps_auth->get_user_info();
 			
-			$task_data['created_at'] = date("Y-m-d H:i:s");
-			$task_data['created_by_id'] = $logged_in_user->user_id;
-			if ( ! $this->db->insert( $this->table_name, $task_data )) {
+			$sample_data['created_at'] = date("Y-m-d H:i:s");
+			$sample_data['created_by_id'] = $logged_in_user->user_id;
+			if ( ! $this->db->insert( $this->table_name, $sample_data )) {
 				// if error in inserting new, rollback
 				$this->db->trans_rollback();
         		return false;
@@ -104,8 +97,8 @@ class Task extends PS_Model {
 
 		} else {
 			//else update the data
-			$this->db->where( 'id', $task_id );
-			if ( ! $this->db->update( $this->table_name, $task_data )) {
+			$this->db->where( 'id', $sample_id );
+			if ( ! $this->db->update( $this->table_name, $sample_data )) {
 				// if error in updating, rollback
 				$this->db->trans_rollback();
         		return false;
@@ -116,27 +109,27 @@ class Task extends PS_Model {
 	}
 
 	/**
-	 * @param int $task_id
+	 * @param int $sample_id
 	 * @return bool
 	 */
-	function delete( $task_id )
+	function delete( $sample_id )
 	{
 		// start the transaction
 		$this->db->trans_start();
 		
-		if ( ! $this->db->delete( $this->assigns_table_name, array( 'task_id' => $task_id ))) {
+		if ( ! $this->db->delete( $this->images_table_name, array( 'sample_id' => $sample_id ))) {
 			// if error in deleteing assigned members, rollback
 			$this->db->trans_rollback();
 			return false;
 		}
-		if ( ! $this->db->delete( $this->task_samples_table_name, array( 'task_id' => $task_id ))) {
+		if ( ! $this->db->delete( $this->task_samples_table_name, array( 'sample_id' => $sample_id ))) {
 			// if error in deleteing assigned members, rollback
 			$this->db->trans_rollback();
 			return false;
 		}
 
 		$logged_in_user = $this->ps_auth->get_user_info();
-		$this->db->where( $this->primary_key, $task_id );
+		$this->db->where( $this->primary_key, $sample_id );
 
 		$delete_data = array(
 			'is_trashed' => 1, 
@@ -144,8 +137,7 @@ class Task extends PS_Model {
 		);
 
 		if ( ! $this->db->update( $this->table_name, $delete_data)) {
-		// if error in updating user status,
-
+	
 			$this->db->trans_rollback();
 			return false;
 		}

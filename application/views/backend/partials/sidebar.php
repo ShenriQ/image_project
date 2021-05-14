@@ -41,14 +41,14 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-          <!-- <li class="nav-item has-treeview">
+          <li class="nav-item has-treeview">
             <a href="<?php echo site_url('/admin') ?>" class="nav-link">
               <i class="nav-icon fa fa-fw <?php echo "fa-tachometer"; ?>"></i>
               <p>
                 <?php echo get_msg("dashboard_label"); ?>
               </p>
             </a>
-          </li> -->
+          </li>
 
 
           <?php if ( !empty( $module_groups )): ?>
