@@ -10,7 +10,7 @@
 
 			<h2>
 				<label class="login-title">
-					<?php echo $site_name; ?>
+					Image Management Panel
 				</label>
 			</h2>
 			<hr/>

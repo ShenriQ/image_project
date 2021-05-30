@@ -14,11 +14,11 @@
 
 		<?php endif;?>
 
-		<?php if ( $this->ps_auth->has_access( BAN )): ?>
+		<!-- <?php if ( $this->ps_auth->has_access( BAN )): ?>
 					
 			<th><?php echo get_msg('user_ban')?></th>
 
-		<?php endif;?>
+		<?php endif;?> -->
 
 		<?php if ( $this->ps_auth->has_access( DEL )): ?>
 				
@@ -51,7 +51,7 @@
 				</td>
 			
 				<?php endif; ?>
-
+<!-- 
 				<?php if ( $this->ps_auth->has_access( BAN )):?>
 						
 					<td>
@@ -71,7 +71,7 @@
 
 					</td>
 
-				<?php endif;?>
+				<?php endif;?> -->
 
 				<?php if ( $this->ps_auth->has_access( DEL )): ?>
 					
